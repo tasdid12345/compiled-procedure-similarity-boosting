@@ -1,0 +1,34 @@
+{
+  "question": "Does a class-balanced, cross-validated gradient-boosting pair classifier keep its similarity ranking better than a standard MLP pair classifier under an unseen optimisation profile?",
+  "method": "Simulated opcode-count histograms (60 classes); same-source pairs from compiler profiles (substitution, dead code, renaming noise, drop/merge). Train on profiles A/B, test on unseen C.",
+  "dataset": {
+    "name": "Simulated compiled-procedure opcode histograms (numpy, profiles A/B train, C test)",
+    "source_url": "https://numpy.org",
+    "n_rows": 80000,
+    "n_train": 60000,
+    "n_test": 20000,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "ROC-AUC on held-out profile C (main); F1@0.5 and log-loss (secondary)",
+  "higher_is_better": true,
+  "baseline": "Standardised MLPClassifier (128-64, early stopping) on pair features [|fa-fb|, fa*fb]",
+  "improved": "Class-balanced LightGBM, 3-fold grouped-CV tuned (num_leaves, learning_rate), with added L1, cosine and training-normalised per-opcode count differences",
+  "metrics": {
+    "baseline_score": 0.9947365399999999,
+    "improved_score": 0.9988943066666667,
+    "improvement": 0.0041577666666667845,
+    "baseline_score_std": 0.0008212979406199671,
+    "improved_score_std": 6.99039976607875e-06,
+    "baseline_f1": 0.869274918548881,
+    "improved_f1": 0.8099418361128751,
+    "baseline_logloss": 0.5902276988260938,
+    "improved_logloss": 0.7712947704043066,
+    "best_cv_roc_auc": 0.9999808163514765,
+    "selected_num_leaves": 15,
+    "selected_learning_rate": 0.1,
+    "n_train_procedures": 3000,
+    "n_test_procedures": 1000
+  },
+  "notes": "Simulated data, not real binaries; results are not comparable to the paper. Baseline has no tuning (paper gives no architecture). Test uses only the unseen profile C and procedures held out from training. Std is over 3 model seeds (ddof=0) on one fixed simulated dataset. Normalisation statistics come from training procedures under profiles A and B only."
+}
